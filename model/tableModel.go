@@ -1,7 +1,7 @@
 package model
 
 import (
-	"httpTable/table_metadata"
+	"httpTable/user_session"
 )
 
 // TableModel труктура используется для конструктора контроллер
@@ -15,22 +15,32 @@ func NewTableModel() *TableModel {
 }
 
 // ResetTable метод модели возвращающие параметры таблицы 2х2
-func (t *TableModel) ResetTable() {
-	table_metadata.TableInf.Row = 2
-	table_metadata.TableInf.Column = 2
+func (t *TableModel) ResetTable(value string) {
+	user_session.Set(value, user_session.Row, user_session.Column)
 }
 
 // AddRow метод модели добавляющий 1 строку после каждого обновления URL
-func (t *TableModel) AddRow() {
-	table_metadata.TableInf.Row++
+func (t *TableModel) AddRow(value string) {
+	row, column, value, _ := user_session.Get(value)
+	row++
+	user_session.Set(value, row, column)
 }
 
 // AddColumns AddRow метод модели добавляющий 1 колонку после каждого обновления URL
-func (t *TableModel) AddColumns() {
-	table_metadata.TableInf.Column++
+func (t *TableModel) AddColumns(value string) {
+	row, column, value, _ := user_session.Get(value)
+	column++
+	user_session.Set(value, row, column)
 }
 
 // GetCurrentTable метод возвращающий текущие параметры таблицы без изменения
-func (t *TableModel) GetCurrentTable() (row int, colum int) {
-	return table_metadata.TableInf.Row, table_metadata.TableInf.Column
+func (t *TableModel) GetCurrentTable(value string) (int, int, string) {
+	row, column, valueNon, _ := user_session.Get(value)
+	if valueNon == `` {
+		row = user_session.Row
+		column = user_session.Column
+	}
+	nameUser, _ := user_session.GetName(value)
+	user_session.Set(value, row, column)
+	return row, column, nameUser
 }
