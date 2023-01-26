@@ -24,7 +24,6 @@ func SetCookie(res http.ResponseWriter, cookie http.Cookie) (string, error) {
 
 // GetCookie функция по получению значения имени и значения Токена с браузера
 func GetCookie(res *http.Request, name string) (string, error) {
-
 	cookie, err := res.Cookie(name)
 	if err != nil {
 		fmt.Printf("Ошибка в имени cookie-файла в контроллере функции Get ", err)

@@ -21,7 +21,7 @@ func (t *TableModel) ResetTable(value string) {
 
 // AddRow метод модели добавляющий 1 строку после каждого обновления URL
 func (t *TableModel) AddRow(value string) {
-	row, column, _, _ := user_session.Get(value)
+	row, column, value, _ := user_session.Get(value)
 	row++
 	user_session.Set(value, row, column)
 }
@@ -34,12 +34,13 @@ func (t *TableModel) AddColumns(value string) {
 }
 
 // GetCurrentTable метод возвращающий текущие параметры таблицы без изменения
-func (t *TableModel) GetCurrentTable(value string) (int, int) {
+func (t *TableModel) GetCurrentTable(value string) (int, int, string) {
 	row, column, valueNon, _ := user_session.Get(value)
 	if valueNon == `` {
 		row = user_session.Row
 		column = user_session.Column
 	}
+	nameUser, _ := user_session.GetName(value)
 	user_session.Set(value, row, column)
-	return row, column
+	return row, column, nameUser
 }
